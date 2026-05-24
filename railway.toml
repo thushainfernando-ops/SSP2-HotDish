@@ -1,3 +1,7 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "composer install --no-dev --optimize-autoloader && npm ci && npm run build && php artisan migrate --force && php artisan db:seed --class=HotDishSeeder --force && php artisan config:cache"
+buildCommand = "composer install --no-dev --optimize-autoloader && npm ci && npm run build"
+
+[deploy]
+preDeployCommand = "php artisan migrate --force"
+startCommand = "php -S 0.0.0.0:$PORT -t public"
