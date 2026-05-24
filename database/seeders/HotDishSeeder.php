@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\MenuItem;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class HotDishSeeder extends Seeder
 {
@@ -12,24 +14,26 @@ class HotDishSeeder extends Seeder
      */
     public function run(): void
     {
-        // Users
-        \App\Models\User::create([
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password123'),
-            'phone' => '0771234567',
-            'role' => 'user',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'john@example.com'],
+            [
+                'name' => 'John Doe',
+                'password' => Hash::make('password123'),
+                'phone' => '0771234567',
+                'role' => 'user',
+            ]
+        );
 
-        \App\Models\User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@hotdish.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
-            'phone' => '0777654321',
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@hotdish.com'],
+            [
+                'name' => 'Admin User',
+                'password' => Hash::make('admin123'),
+                'phone' => '0777654321',
+                'role' => 'admin',
+            ]
+        );
 
-        // Menu Items
         $menuItems = [
             ['name' => 'Traditional Rice & Curry', 'description' => 'Authentic Sri Lankan rice with 5 curries', 'price' => 850.00, 'category' => 'rice-curry', 'image' => 'assets/vegetable-rice-curry.jpg'],
             ['name' => 'Chicken Rice & Curry', 'description' => 'Spicy chicken curry with rice and sides', 'price' => 950.00, 'category' => 'rice-curry', 'image' => 'assets/rice-and-curry.jpg'],
@@ -42,7 +46,10 @@ class HotDishSeeder extends Seeder
         ];
 
         foreach ($menuItems as $item) {
-            \App\Models\MenuItem::create($item);
+            MenuItem::updateOrCreate(
+                ['name' => $item['name']],
+                $item
+            );
         }
     }
 }
