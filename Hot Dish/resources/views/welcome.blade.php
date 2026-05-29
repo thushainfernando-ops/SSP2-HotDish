@@ -128,7 +128,14 @@
                 </div>
 
                 <div class="mt-8 grid gap-6 md:grid-cols-3">
-                    @foreach(\App\Models\MenuItem::take(3)->get() as $item)
+                    @php
+                        try {
+                            $items = \App\Models\MenuItem::take(3)->get();
+                        } catch (\Exception $e) {
+                            $items = collect();
+                        }
+                    @endphp
+                    @forelse($items as $item)
                         <article class="card group overflow-hidden">
                             <div class="relative h-52 overflow-hidden">
                                 <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
@@ -147,7 +154,11 @@
                                 </div>
                             </div>
                         </article>
-                    @endforeach
+                    @empty
+                        <div class="col-span-full text-center py-12">
+                            <p class="text-slate-600">Menu items coming soon!</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </section>
